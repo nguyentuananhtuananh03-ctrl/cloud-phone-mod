@@ -201,6 +201,7 @@
   <div class="container">
     <div class="brand-header">
       <div class="avatar-wrapper">
+        <!-- Đã cập nhật ảnh avatar mới trực tiếp vào đây -->
         <img class="avatar-img" src="https://raw.githubusercontent.com/tuananh2122/photos/main/1000008103.png" alt="Cloud phonemod">
       </div>
       <h1 class="brand-title">Cloud phonemod <span>⚡</span></h1>
@@ -209,7 +210,7 @@
     <!-- MÀN HÌNH 1: NHẬP KEY HOẶC CHỌN KIẾM KEY -->
     <div id="screenLogin" class="card">
       <div class="card-title">🔑 Nhập Key Sử Dụng</div>
-      <p class="card-desc">Bạn hãy nhập key hợp lệ để mở khóa hệ thống chọn script.</p>
+      <p class="card-desc">Bạn hãy nhập key hợp lệ (Key ngày hoặc Key vĩnh viễn) để mở khóa hệ thống.</p>
       
       <input type="text" id="keyInput" class="input-field" placeholder="Nhập Key của bạn vào đây...">
       <button class="btn btn-primary" onclick="verifyKey()">Xác Nhận Key</button>
@@ -252,7 +253,7 @@
     <!-- MÀN HÌNH 2: CHỌN CÁCH KIẾM KEY -->
     <div id="screenGetMethod" class="card hidden">
       <div class="card-title">💎 Chọn Cách Kiếm Key</div>
-      <p class="card-desc">Chọn một trong hai phương thức dưới đây để nhận Key:</p>
+      <p class="card-desc">Chọn một trong hai phương thức dưới đây để nhận Key ngày:</p>
       
       <button class="btn btn-primary" onclick="startMathMethod()">Cách 1: Giải 17 bài toán</button>
       <button class="btn btn-secondary" onclick="startTimerMethod()">Cách 2: Đợi 80 giây & Nhập Code</button>
@@ -341,8 +342,11 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       const now = new Date();
       const day = String(now.getDate()).padStart(2, '0');
       const month = String(now.getMonth() + 1).padStart(2, '0');
-      return `TUANANH_${day}${month}5550363438`;
+      const year = now.getFullYear();
+      return `TUANANH_${day}${month}${year}5550363438`;
     }
+
+    const PERMANENT_KEY = "TUANANHVIPPROMAX";
 
     function showScreen(screenId) {
       const screens = ['screenLogin', 'screenScriptHub', 'screenGetMethod', 'screenMath', 'screenTimer', 'screenShowKeyResult'];
@@ -353,18 +357,37 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
 
       if (screenId === 'screenScriptHub') {
         updateSelectedScript();
+      } else if (screenId === 'screenShowKeyResult') {
+        document.getElementById('finalKeyDisplay').innerText = getTodayKey();
       }
     }
 
     function verifyKey() {
       const inputVal = document.getElementById('keyInput').value.trim();
-      const validKey = getTodayKey();
+      const validDayKey = getTodayKey();
 
-      if (inputVal === validKey) {
-        alert("Xác thực Key thành công!");
+      if (inputVal === validDayKey) {
+        alert("Xác thực Key ngày thành công!");
+        showScreen('screenScriptHub');
+      } else if (inputVal === PERMANENT_KEY) {
+        const activeDevice = localStorage.getItem('active_permanent_device');
+        let currentDeviceId = localStorage.getItem('my_device_id');
+
+        if (!currentDeviceId) {
+          currentDeviceId = 'dev_' + Math.random().toString(36).substring(2, 15);
+          localStorage.setItem('my_device_id', currentDeviceId);
+        }
+
+        if (activeDevice && activeDevice !== currentDeviceId) {
+          alert("Key vĩnh viễn này đang được sử dụng ở một thiết bị khác! Key này chỉ cho phép tối đa 1 thiết bị sử dụng.");
+          return;
+        }
+
+        localStorage.setItem('active_permanent_device', currentDeviceId);
+        alert("Xác thực Key vĩnh viễn thành công!");
         showScreen('screenScriptHub');
       } else {
-        alert("Key không chính xác hoặc đã hết hạn trong ngày hôm nay!");
+        alert("Key không chính xác hoặc đã hết hạn!");
       }
     }
 
@@ -385,7 +408,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       alert("Đã sao chép mã Script thành công!");
     }
 
-    // --- CÁCH 1: GIẢI 17 BÀI TOÁN ---
     let currentMathStep = 1;
     let currentAnswer = 0;
 
@@ -418,8 +440,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       const userVal = parseInt(document.getElementById('mathAnswer').value);
       if (userVal === currentAnswer) {
         currentMathStep++;
-        if (currentMathStep > 17) { // Đạt 17 câu
-          document.getElementById('finalKeyDisplay').innerText = getTodayKey();
+        if (currentMathStep > 17) {
           showScreen('screenShowKeyResult');
         } else {
           generateNewMath();
@@ -429,13 +450,12 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       }
     }
 
-    // --- CÁCH 2: ĐỢI 80 GIÂY & NHẬP CODE ---
     let timerInterval = null;
     let randomSecretCode = "";
 
     function startTimerMethod() {
       showScreen('screenTimer');
-      let timeLeft = 80; // Giảm còn 80 giây
+      let timeLeft = 80;
       document.getElementById('timerDisplay').innerText = `${timeLeft}s`;
       document.getElementById('timerDisplay').classList.remove('hidden');
       document.getElementById('timerStatusText').innerText = "Vui lòng đợi hệ thống tạo mã code ngẫu nhiên...";
@@ -461,7 +481,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
     function verifyGeneratedCode() {
       const userCode = document.getElementById('codeInput').value.trim();
       if (userCode === randomSecretCode) {
-        document.getElementById('finalKeyDisplay').innerText = getTodayKey();
         showScreen('screenShowKeyResult');
       } else {
         alert("Mã code bạn nhập không chính xác!");
@@ -475,5 +494,5 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
     }
   </script>
 </body>
-  </html>
-      
+                                               </html>
+                                                                                            
