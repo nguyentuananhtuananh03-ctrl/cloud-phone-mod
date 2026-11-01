@@ -395,6 +395,11 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       const inputVal = document.getElementById('keyInput').value.trim();
       const validDayKey = getTodayKey();
 
+      if (!inputVal) {
+        alert("Vui lòng nhập Key trước khi xác nhận!");
+        return;
+      }
+
       if (inputVal === validDayKey) {
         localStorage.setItem('last_active_date', new Date().toDateString());
         alert("Xác thực Key thành công!");
@@ -428,7 +433,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
     function onCategoryChanged() {
       const newCategory = document.getElementById("activeScriptSelector").value;
       document.getElementById("loginScriptSelector").value = newCategory;
-      alert("Bạn đã chọn danh mục mới! Vui lòng nhập lại Key để truy cập.");
+      alert("Bạn đã đổi danh mục! Vui lòng nhập lại Key để tiếp tục.");
       logoutKey();
     }
 
@@ -474,6 +479,10 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
 
     function submitMathAnswer() {
       const userVal = parseInt(document.getElementById('mathAnswer').value);
+      if (isNaN(userVal)) {
+        alert("Vui lòng nhập kết quả!");
+        return;
+      }
       if (userVal === currentAnswer) {
         currentMathStep++;
         if (currentMathStep > 17) {
@@ -509,11 +518,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
           document.getElementById('timerDisplay').classList.add('hidden');
           document.getElementById('timerStatusText').innerText = "Đã hoàn thành! Hãy nhập mã code bên dưới:";
           document.getElementById('generatedCodeText').innerText = randomSecretCode;
-          document.getElementById('codeSection').classList.remove('hidden');
-        }
-      }, 1000);
-    }
-
-    function verifyGeneratedCode() {
-      const userCode = document.getElementById('codeInput').value.trim();
-      if (userCode === randomSe
+          document.getElementById('codeSection').classList.r
