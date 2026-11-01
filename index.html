@@ -254,14 +254,14 @@
       <div class="card-title">💎 Chọn Cách Kiếm Key</div>
       <p class="card-desc">Chọn một trong hai phương thức dưới đây để nhận Key:</p>
       
-      <button class="btn btn-primary" onclick="startMathMethod()">Cách 1: Giải 20 bài toán</button>
-      <button class="btn btn-secondary" onclick="startTimerMethod()">Cách 2: Đợi 100 giây & Nhập Code</button>
+      <button class="btn btn-primary" onclick="startMathMethod()">Cách 1: Giải 17 bài toán</button>
+      <button class="btn btn-secondary" onclick="startTimerMethod()">Cách 2: Đợi 80 giây & Nhập Code</button>
       <button class="btn btn-secondary" onclick="showScreen('screenLogin')" style="margin-top: 4px;">Quay lại</button>
     </div>
 
-    <!-- MÀN HÌNH CÁCH 1: GIẢI 20 BÀI TOÁN -->
+    <!-- MÀN HÌNH CÁCH 1: GIẢI 17 BÀI TOÁN -->
     <div id="screenMath" class="card hidden">
-      <div class="card-title">🧮 Giải Toán Nhận Key (<span id="mathProgress">1</span>/20)</div>
+      <div class="card-title">🧮 Giải Toán Nhận Key (<span id="mathProgress">1</span>/17)</div>
       <div id="mathQuestion" class="math-box">5 + 3 = ?</div>
       
       <input type="number" id="mathAnswer" class="input-field" placeholder="Nhập kết quả...">
@@ -269,10 +269,10 @@
       <button class="btn btn-secondary" onclick="showScreen('screenGetMethod')">Hủy</button>
     </div>
 
-    <!-- MÀN HÌNH CÁCH 2: ĐỢI 100 GIÂY & NHẬP CODE -->
+    <!-- MÀN HÌNH CÁCH 2: ĐỢI 80 GIÂY & NHẬP CODE -->
     <div id="screenTimer" class="card hidden">
       <div class="card-title">⏳ Đợi Nhận Mã Code</div>
-      <div id="timerDisplay" class="timer-display">100s</div>
+      <div id="timerDisplay" class="timer-display">80s</div>
       <p id="timerStatusText" class="card-desc">Vui lòng đợi hệ thống tạo mã code ngẫu nhiên...</p>
       
       <div id="codeSection" class="hidden" style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
@@ -385,7 +385,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       alert("Đã sao chép mã Script thành công!");
     }
 
-    // --- CÁCH 1: GIẢI 20 BÀI TOÁN ---
+    // --- CÁCH 1: GIẢI 17 BÀI TOÁN ---
     let currentMathStep = 1;
     let currentAnswer = 0;
 
@@ -418,7 +418,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       const userVal = parseInt(document.getElementById('mathAnswer').value);
       if (userVal === currentAnswer) {
         currentMathStep++;
-        if (currentMathStep > 20) { // Đạt 20 câu
+        if (currentMathStep > 17) { // Đạt 17 câu
           document.getElementById('finalKeyDisplay').innerText = getTodayKey();
           showScreen('screenShowKeyResult');
         } else {
@@ -429,16 +429,16 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       }
     }
 
-    // --- CÁCH 2: ĐỢI 100 GIÂY & NHẬP CODE ---
+    // --- CÁCH 2: ĐỢI 80 GIÂY & NHẬP CODE ---
     let timerInterval = null;
     let randomSecretCode = "";
 
     function startTimerMethod() {
       showScreen('screenTimer');
-      let timeLeft = 100;
+      let timeLeft = 80; // Giảm còn 80 giây
       document.getElementById('timerDisplay').innerText = `${timeLeft}s`;
       document.getElementById('timerDisplay').classList.remove('hidden');
-      document.getElementById('timerStatusText').innerText = "Vui lòng đợi đếm ngược hoàn tất...";
+      document.getElementById('timerStatusText').innerText = "Vui lòng đợi hệ thống tạo mã code ngẫu nhiên...";
       document.getElementById('codeSection').classList.add('hidden');
 
       if (timerInterval) clearInterval(timerInterval);
@@ -475,5 +475,5 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
     }
   </script>
 </body>
-        </html>
-                                                  
+  </html>
+      
