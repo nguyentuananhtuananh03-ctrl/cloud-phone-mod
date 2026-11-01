@@ -201,6 +201,7 @@
   <div class="container">
     <div class="brand-header">
       <div class="avatar-wrapper">
+        <!-- Đã cập nhật ảnh avatar mới trực tiếp vào đây -->
         <img class="avatar-img" src="https://raw.githubusercontent.com/tuananh2122/photos/main/1000008103.png" alt="Cloud phonemod">
       </div>
       <h1 class="brand-title">Cloud phonemod <span>⚡</span></h1>
@@ -209,7 +210,7 @@
     <!-- MÀN HÌNH 1: NHẬP KEY HOẶC CHỌN KIẾM KEY -->
     <div id="screenLogin" class="card">
       <div class="card-title">🔑 Nhập Key Sử Dụng</div>
-      <p class="card-desc">Bạn hãy nhập key hợp lệ để mở khóa hệ thống[span_1](start_span)[span_1](end_span).</p>
+      <p class="card-desc">Bạn hãy nhập key hợp lệ (Key ngày hoặc Key vĩnh viễn) để mở khóa hệ thống.</p>
       
       <input type="text" id="keyInput" class="input-field" placeholder="Nhập Key của bạn vào đây...">
       <button class="btn btn-primary" onclick="verifyKey()">Xác Nhận Key</button>
@@ -222,7 +223,7 @@
     <!-- MÀN HÌNH CHỌN SCRIPT (SAU KHI NHẬP KEY ĐÚNG) -->
     <div id="screenScriptHub" class="card hidden">
       <div class="card-title">📜 Chọn Script Của Bạn</div>
-      <p class="card-desc">Key hợp lệ! Hãy chọn script bạn muốn sử dụng bên dưới[span_2](start_span)[span_2](end_span):</p>
+      <p class="card-desc">Key hợp lệ! Hãy chọn script bạn muốn sử dụng bên dưới:</p>
       
       <select id="scriptSelector" class="script-select" onchange="updateSelectedScript()">
         <option value="realkid_hub">Realkid Hub</option>
@@ -252,7 +253,7 @@
     <!-- MÀN HÌNH 2: CHỌN CÁCH KIẾM KEY -->
     <div id="screenGetMethod" class="card hidden">
       <div class="card-title">💎 Chọn Cách Kiếm Key</div>
-      <p class="card-desc">Chọn một trong hai phương thức dưới đây để nhận Key[span_3](start_span)[span_3](end_span):</p>
+      <p class="card-desc">Chọn một trong hai phương thức dưới đây để nhận Key ngày:</p>
       
       <button class="btn btn-primary" onclick="startMathMethod()">Cách 1: Giải 17 bài toán</button>
       <button class="btn btn-secondary" onclick="startTimerMethod()">Cách 2: Đợi 80 giây & Nhập Code</button>
@@ -273,7 +274,7 @@
     <div id="screenTimer" class="card hidden">
       <div class="card-title">⏳ Đợi Nhận Mã Code</div>
       <div id="timerDisplay" class="timer-display">80s</div>
-      <p id="timerStatusText" class="card-desc">Vui lòng đợi hệ thống tạo mã code ngẫu nhiên[span_4](start_span)[span_4](end_span)...</p>
+      <p id="timerStatusText" class="card-desc">Vui lòng đợi hệ thống tạo mã code ngẫu nhiên...</p>
       
       <div id="codeSection" class="hidden" style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
         <p class="card-desc">Mã code của bạn là: <b id="generatedCodeText" style="color:#10b981;"></b></p>
@@ -286,7 +287,7 @@
     <!-- MÀN HÌNH HIỂN THỊ KEY KHI KIẾM THÀNH CÔNG -->
     <div id="screenShowKeyResult" class="card hidden">
       <div class="card-title">🎉 Key Của Bạn Hôm Nay</div>
-      <p class="card-desc">Hãy sao chép key bên dưới để sử dụng[span_5](start_span)[span_5](end_span):</p>
+      <p class="card-desc">Hãy sao chép key bên dưới để sử dụng:</p>
       <div id="finalKeyDisplay" class="key-box"></div>
       <button class="btn btn-success" onclick="copyFinalKey()">Sao Chép Key</button>
       <button class="btn btn-primary" onclick="showScreen('screenLogin')" style="margin-top: 4px;">Đi Đến Nhập Key</button>
@@ -366,7 +367,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       const validDayKey = getTodayKey();
 
       if (inputVal === validDayKey) {
-        alert("Xác thực Key thành công!");
+        alert("Xác thực Key ngày thành công!");
         showScreen('screenScriptHub');
       } else if (inputVal === PERMANENT_KEY) {
         const activeDevice = localStorage.getItem('active_permanent_device');
@@ -457,7 +458,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       let timeLeft = 80;
       document.getElementById('timerDisplay').innerText = `${timeLeft}s`;
       document.getElementById('timerDisplay').classList.remove('hidden');
-      document.getElementById('timerStatusText').innerText = "Vui lòng đợi hệ thống tạo mã code ngẫu nhiên[span_6](start_span)[span_6](end_span)...";
+      document.getElementById('timerStatusText').innerText = "Vui lòng đợi hệ thống tạo mã code ngẫu nhiên...";
       document.getElementById('codeSection').classList.add('hidden');
 
       if (timerInterval) clearInterval(timerInterval);
@@ -494,4 +495,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
   </script>
 </body>
   </html>
-          
+        
