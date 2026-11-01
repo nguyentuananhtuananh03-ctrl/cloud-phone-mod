@@ -206,7 +206,7 @@
       <h1 class="brand-title">Cloud phonemod <span>⚡</span></h1>
     </div>
 
-    <!-- MÀN HÌNH 1: CHỌN SCRIPT RỒI NHẬP KEY HOẶC KIẾM KEY -->
+    <!-- MÀN HÌNH 1: CHỌN SCRIPT & NHẬP KEY -->
     <div id="screenLogin" class="card">
       <div class="card-title">🔑 Chọn Danh Mục & Nhập Key</div>
       <p class="card-desc">Vui lòng chọn script bạn muốn dùng và nhập key hợp lệ để truy cập.</p>
@@ -231,10 +231,10 @@
       </select>
 
       <input type="text" id="keyInput" class="input-field" placeholder="Nhập Key của bạn vào đây...">
-      <button class="btn btn-primary" onclick="verifyKey()">Xác Nhận Key</button>
+      <button class="btn btn-primary" id="btnVerify">Xác Nhận Key</button>
       
       <div style="width:100%; display: flex; gap: 10px; margin-top: 4px;">
-        <button class="btn btn-secondary" onclick="showScreen('screenGetMethod')">Kiếm Key</button>
+        <button class="btn btn-secondary" id="btnGetMethod">Kiếm Key</button>
       </div>
     </div>
 
@@ -243,7 +243,7 @@
       <div class="card-title">📜 Script Của Bạn</div>
       <p class="card-desc">Key hợp lệ! Dưới đây là mã Script bạn đã chọn:</p>
       
-      <select id="activeScriptSelector" class="script-select" onchange="onCategoryChanged()">
+      <select id="activeScriptSelector" class="script-select">
         <option value="realkid_hub">Realkid Hub</option>
         <option value="realkid_kaitun">Realkid Hub Kaitun</option>
         <option value="teddy_hub">Teddy Hub</option>
@@ -263,8 +263,8 @@
       </select>
 
       <div id="scriptCodeDisplay" class="key-box"></div>
-      <button class="btn btn-success" onclick="copyScriptCode()">Sao chép Script</button>
-      <button class="btn btn-secondary" onclick="logoutKey()" style="margin-top: 4px;">Quay lại nhập Key khác</button>
+      <button class="btn btn-success" id="btnCopyScript">Sao chép Script</button>
+      <button class="btn btn-secondary" id="btnLogout" style="margin-top: 4px;">Quay lại nhập Key khác</button>
     </div>
 
     <!-- MÀN HÌNH 2: CHỌN CÁCH KIẾM KEY -->
@@ -272,9 +272,9 @@
       <div class="card-title">💎 Chọn Cách Kiếm Key</div>
       <p class="card-desc">Chọn một trong hai phương thức dưới đây để nhận Key:</p>
       
-      <button class="btn btn-primary" onclick="startMathMethod()">Cách 1: Giải 17 bài toán</button>
-      <button class="btn btn-secondary" onclick="startTimerMethod()">Cách 2: Đợi 80 giây & Nhập Code</button>
-      <button class="btn btn-secondary" onclick="showScreen('screenLogin')" style="margin-top: 4px;">Quay lại</button>
+      <button class="btn btn-primary" id="btnMathMethod">Cách 1: Giải 17 bài toán</button>
+      <button class="btn btn-secondary" id="btnTimerMethod">Cách 2: Đợi 80 giây & Nhập Code</button>
+      <button class="btn btn-secondary" id="btnBackToLogin" style="margin-top: 4px;">Quay lại</button>
     </div>
 
     <!-- MÀN HÌNH CÁCH 1: GIẢI 17 BÀI TOÁN -->
@@ -283,8 +283,8 @@
       <div id="mathQuestion" class="math-box">5 + 3 = ?</div>
       
       <input type="number" id="mathAnswer" class="input-field" placeholder="Nhập kết quả...">
-      <button class="btn btn-primary" onclick="submitMathAnswer()">Trả Lời</button>
-      <button class="btn btn-secondary" onclick="showScreen('screenGetMethod')">Hủy</button>
+      <button class="btn btn-primary" id="btnSubmitMath">Trả Lời</button>
+      <button class="btn btn-secondary" id="btnCancelMath">Hủy</button>
     </div>
 
     <!-- MÀN HÌNH CÁCH 2: ĐỢI 80 GIÂY & NHẬP CODE -->
@@ -296,18 +296,18 @@
       <div id="codeSection" class="hidden" style="width: 100%; display: flex; flex-direction: column; gap: 10px;">
         <p class="card-desc">Mã code của bạn là: <b id="generatedCodeText" style="color:#10b981;"></b></p>
         <input type="text" id="codeInput" class="input-field" placeholder="Nhập lại mã code ở trên...">
-        <button class="btn btn-success" onclick="verifyGeneratedCode()">Tiếp Tục Nhận Key</button>
+        <button class="btn btn-success" id="btnVerifyCode">Tiếp Tục Nhận Key</button>
       </div>
-      <button class="btn btn-secondary" onclick="showScreen('screenGetMethod')">Hủy</button>
+      <button class="btn btn-secondary" id="btnCancelTimer">Hủy</button>
     </div>
 
     <!-- MÀN HÌNH HIỂN THỊ KEY KHI KIẾM THÀNH CÔNG -->
     <div id="screenShowKeyResult" class="card hidden">
       <div class="card-title">🎉 Key Của Bạn Hôm Nay</div>
-      <p class="card-desc">Hãy sao chép key bên dưới để sử dụng:</p>
+      <p class="card-desc">Hãy sao chép key bên dưới hoặc bấm nút để tự động điền vào ô đăng nhập:</p>
       <div id="finalKeyDisplay" class="key-box"></div>
-      <button class="btn btn-success" onclick="copyFinalKey()">Sao Chép Key</button>
-      <button class="btn btn-primary" onclick="showScreen('screenLogin')" style="margin-top: 4px;">Đi Đến Nhập Key</button>
+      <button class="btn btn-success" id="btnCopyKey">Sao Chép Key</button>
+      <button class="btn btn-primary" id="btnUseKeyDirect" style="margin-top: 4px;">Sử Dụng Key Này Ngay</button>
     </div>
   </div>
 
@@ -373,14 +373,17 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
         document.getElementById('keyInput').value = "";
       }
       showScreen('screenLogin');
+      initEvents();
     };
 
     function showScreen(screenId) {
       const screens = ['screenLogin', 'screenScriptHub', 'screenGetMethod', 'screenMath', 'screenTimer', 'screenShowKeyResult'];
       screens.forEach(id => {
-        document.getElementById(id).classList.add('hidden');
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
       });
-      document.getElementById(screenId).classList.remove('hidden');
+      const target = document.getElementById(screenId);
+      if (target) target.classList.remove('hidden');
 
       if (screenId === 'screenScriptHub') {
         const selected = document.getElementById("loginScriptSelector").value;
@@ -518,4 +521,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
           document.getElementById('timerDisplay').classList.add('hidden');
           document.getElementById('timerStatusText').innerText = "Đã hoàn thành! Hãy nhập mã code bên dưới:";
           document.getElementById('generatedCodeText').innerText = randomSecretCode;
-          document.getElementById('codeSection').classList.r
+          document.getElementById('codeSection').classList.remove('hidden');
+        }
+      }, 1000);
+    }
+
+    function verifyGeneratedCode
