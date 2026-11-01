@@ -504,27 +504,58 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
     };
 
     let completedTasks = new Set();
+    let activeTimers = {}; // Lưu trữ bộ đếm thời gian để có thể reset nếu cần
 
     function updateSelectedScript() {
       const selector = document.getElementById("scriptSelector");
       const selectedText = selector.options[selector.selectedIndex].text;
       document.getElementById("displayScriptName").innerText = selectedText;
+
+      // Reset lại toàn bộ nhiệm vụ khi đổi script
+      resetTasks();
+    }
+
+    function resetTasks() {
+      // Dừng tất cả các bộ đếm thời gian đang chạy
+      for (let taskId in activeTimers) {
+        clearInterval(activeTimers[taskId]);
+      }
+      activeTimers = {};
+      completedTasks.clear();
+
+      // Reset text của các nút nhiệm vụ về "Bắt đầu"
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById(`btn-text-${i}`).innerText = "Bắt đầu";
+      }
+
+      // Reset thanh tiến trình và nút nhận script
+      document.getElementById("completedCount").innerText = "0";
+      document.getElementById("progressBar").style.width = "0%";
+
+      const getKeyBtn = document.getElementById("getKeyBtn");
+      getKeyBtn.classList.remove("active");
+      getKeyBtn.setAttribute("disabled", "true");
+      getKeyBtn.innerHTML = "🔓 Hoàn thành để nhận script";
     }
 
     function startTask(taskId) {
       if (completedTasks.has(taskId)) return;
+      if (activeTimers[taskId]) return; // Tránh bấm nhiều lần khi đang chạy
 
       const btnText = document.getElementById(`btn-text-${taskId}`);
-      let timeLeft = 30;
+      
+      // Nhiệm vụ 3: 2 phút (120 giây), Nhiệm vụ 1 và 2: 30 giây
+      let timeLeft = (taskId === 3) ? 120 : 30;
       
       btnText.innerText = `${timeLeft}s`;
 
-      const timer = setInterval(() => {
+      activeTimers[taskId] = setInterval(() => {
         timeLeft--;
         if (timeLeft > 0) {
           btnText.innerText = `${timeLeft}s`;
         } else {
-          clearInterval(timer);
+          clearInterval(activeTimers[taskId]);
+          delete activeTimers[taskId];
           btnText.innerText = "✓ Hoàn thành";
           completedTasks.add(taskId);
           updateProgress();
