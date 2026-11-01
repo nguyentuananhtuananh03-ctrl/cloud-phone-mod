@@ -201,17 +201,35 @@
   <div class="container">
     <div class="brand-header">
       <div class="avatar-wrapper">
-        <!-- Đã cập nhật ảnh avatar mới trực tiếp vào đây -->
         <img class="avatar-img" src="https://raw.githubusercontent.com/tuananh2122/photos/main/1000008103.png" alt="Cloud phonemod">
       </div>
       <h1 class="brand-title">Cloud phonemod <span>⚡</span></h1>
     </div>
 
-    <!-- MÀN HÌNH 1: NHẬP KEY HOẶC CHỌN KIẾM KEY -->
+    <!-- MÀN HÌNH 1: CHỌN SCRIPT RỒI NHẬP KEY HOẶC KIẾM KEY -->
     <div id="screenLogin" class="card">
-      <div class="card-title">🔑 Nhập Key Sử Dụng</div>
-      <p class="card-desc">Bạn hãy nhập key hợp lệ (Key ngày hoặc Key vĩnh viễn) để mở khóa hệ thống.</p>
+      <div class="card-title">🔑 Chọn Danh Mục & Nhập Key</div>
+      <p class="card-desc">Vui lòng chọn script bạn muốn dùng và nhập key hợp lệ để truy cập.</p>
       
+      <select id="loginScriptSelector" class="script-select">
+        <option value="realkid_hub">Realkid Hub</option>
+        <option value="realkid_kaitun">Realkid Hub Kaitun</option>
+        <option value="teddy_hub">Teddy Hub</option>
+        <option value="teddy_kaitun">Teddyhub Kaitun</option>
+        <option value="quantum_onyx">Quantum Onyx</option>
+        <option value="bacon_hub">Bacon Hub</option>
+        <option value="chilli_v7">Chilli Hub V7</option>
+        <option value="vxeze">Vxeze</option>
+        <option value="chullu">Chullu</option>
+        <option value="atras">Atras</option>
+        <option value="codium">Codium</option>
+        <option value="redz_hub">Redz Hub</option>
+        <option value="blue_x_hub">Blue X Hub</option>
+        <option value="chilli_v5">Chilli Hub V5</option>
+        <option value="lennon_hub">Lennon Hub</option>
+        <option value="miranda_kaitun">Miranda Hub Kaitun</option>
+      </select>
+
       <input type="text" id="keyInput" class="input-field" placeholder="Nhập Key của bạn vào đây...">
       <button class="btn btn-primary" onclick="verifyKey()">Xác Nhận Key</button>
       
@@ -222,17 +240,16 @@
 
     <!-- MÀN HÌNH CHỌN SCRIPT (SAU KHI NHẬP KEY ĐÚNG) -->
     <div id="screenScriptHub" class="card hidden">
-      <div class="card-title">📜 Chọn Script Của Bạn</div>
-      <p class="card-desc">Key hợp lệ! Hãy chọn script bạn muốn sử dụng bên dưới:</p>
+      <div class="card-title">📜 Script Của Bạn</div>
+      <p class="card-desc">Key hợp lệ! Dưới đây là mã Script bạn đã chọn:</p>
       
-      <select id="scriptSelector" class="script-select" onchange="updateSelectedScript()">
+      <select id="activeScriptSelector" class="script-select" onchange="onCategoryChanged()">
         <option value="realkid_hub">Realkid Hub</option>
         <option value="realkid_kaitun">Realkid Hub Kaitun</option>
         <option value="teddy_hub">Teddy Hub</option>
         <option value="teddy_kaitun">Teddyhub Kaitun</option>
         <option value="quantum_onyx">Quantum Onyx</option>
         <option value="bacon_hub">Bacon Hub</option>
-        <option value="steal_egg">Steal An Egg</option>
         <option value="chilli_v7">Chilli Hub V7</option>
         <option value="vxeze">Vxeze</option>
         <option value="chullu">Chullu</option>
@@ -253,7 +270,7 @@
     <!-- MÀN HÌNH 2: CHỌN CÁCH KIẾM KEY -->
     <div id="screenGetMethod" class="card hidden">
       <div class="card-title">💎 Chọn Cách Kiếm Key</div>
-      <p class="card-desc">Chọn một trong hai phương thức dưới đây để nhận Key ngày:</p>
+      <p class="card-desc">Chọn một trong hai phương thức dưới đây để nhận Key:</p>
       
       <button class="btn btn-primary" onclick="startMathMethod()">Cách 1: Giải 17 bài toán</button>
       <button class="btn btn-secondary" onclick="startTimerMethod()">Cách 2: Đợi 80 giây & Nhập Code</button>
@@ -325,7 +342,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/re
 loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/refs/heads/main/TeddyHub-kaitunBF.lua"))()`,
       quantum_onyx: `loadstring(game:HttpGet("https://raw.githubusercontent.com/flazh.gay/QuantumOnyx/refs/heads/main/QuantumOnyx.lua"))()`,
       bacon_hub: `getgenv().team = "Pirates" loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BaconHub/hack/refs/heads/main/Bloxfruits.lua"))()`,
-      steal_egg: `loadstring(game:HttpGet("https://raw.githubusercontent.com/kairobloc/stealanegg/refs/heads/main/chillihubv7.lua"))()`,
       chilli_v7: `loadstring(game:HttpGet("https://raw.githubusercontent.com/kairobloc/stealanegg/refs/heads/main/chillihubv7.lua"))()`,
       vxeze: `loadstring(game:HttpGet("https://gist.githubusercontent.com/angeryy-tvy/6a9ce750ddf5860230196ac468868fdb/raw/Steal-An-Egg-Vxeze"))()`,
       chullu: `loadstring(game:HttpGet("https://raw.githubusercontent.com/napun87/stealaneggv2/refs/heads/main/chulluHub.lua"))()`,
@@ -348,6 +364,17 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
 
     const PERMANENT_KEY = "TUANANHVIPPROMAX";
 
+    window.onload = function() {
+      const savedDate = localStorage.getItem('last_active_date');
+      const currentDate = new Date().toDateString();
+
+      if (savedDate !== currentDate) {
+        localStorage.setItem('last_active_date', currentDate);
+        document.getElementById('keyInput').value = "";
+      }
+      showScreen('screenLogin');
+    };
+
     function showScreen(screenId) {
       const screens = ['screenLogin', 'screenScriptHub', 'screenGetMethod', 'screenMath', 'screenTimer', 'screenShowKeyResult'];
       screens.forEach(id => {
@@ -356,7 +383,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       document.getElementById(screenId).classList.remove('hidden');
 
       if (screenId === 'screenScriptHub') {
-        updateSelectedScript();
+        const selected = document.getElementById("loginScriptSelector").value;
+        document.getElementById("activeScriptSelector").value = selected;
+        updateScriptCode();
       } else if (screenId === 'screenShowKeyResult') {
         document.getElementById('finalKeyDisplay').innerText = getTodayKey();
       }
@@ -367,17 +396,17 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       const validDayKey = getTodayKey();
 
       if (inputVal === validDayKey) {
-        alert("Xác thực Key ngày thành công!");
+        localStorage.setItem('last_active_date', new Date().toDateString());
+        alert("Xác thực Key thành công!");
         showScreen('screenScriptHub');
       } else if (inputVal === PERMANENT_KEY) {
-        const activeDevice = localStorage.getItem('active_permanent_device');
         let currentDeviceId = localStorage.getItem('my_device_id');
-
         if (!currentDeviceId) {
           currentDeviceId = 'dev_' + Math.random().toString(36).substring(2, 15);
           localStorage.setItem('my_device_id', currentDeviceId);
         }
 
+        const activeDevice = localStorage.getItem('active_permanent_device');
         if (activeDevice && activeDevice !== currentDeviceId) {
           alert("Key vĩnh viễn này đang được sử dụng ở một thiết bị khác! Key này chỉ cho phép tối đa 1 thiết bị sử dụng.");
           return;
@@ -396,8 +425,15 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
       showScreen('screenLogin');
     }
 
-    function updateSelectedScript() {
-      const selector = document.getElementById("scriptSelector").value;
+    function onCategoryChanged() {
+      const newCategory = document.getElementById("activeScriptSelector").value;
+      document.getElementById("loginScriptSelector").value = newCategory;
+      alert("Bạn đã chọn danh mục mới! Vui lòng nhập lại Key để truy cập.");
+      logoutKey();
+    }
+
+    function updateScriptCode() {
+      const selector = document.getElementById("activeScriptSelector").value;
       const code = scriptsData[selector] || "Code đang cập nhật...";
       document.getElementById("scriptCodeDisplay").innerText = code;
     }
@@ -480,19 +516,4 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/teddyhubdev/diepvy/re
 
     function verifyGeneratedCode() {
       const userCode = document.getElementById('codeInput').value.trim();
-      if (userCode === randomSecretCode) {
-        showScreen('screenShowKeyResult');
-      } else {
-        alert("Mã code bạn nhập không chính xác!");
-      }
-    }
-
-    function copyFinalKey() {
-      const keyText = document.getElementById('finalKeyDisplay').innerText;
-      navigator.clipboard.writeText(keyText);
-      alert("Đã sao chép Key thành công!");
-    }
-  </script>
-</body>
-                                               </html>
-                                                                                            
+      if (userCode === randomSe
